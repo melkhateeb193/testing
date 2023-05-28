@@ -4,7 +4,7 @@ import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 function HeaderNav({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,15 +30,12 @@ function HeaderNav({ onSearch }) {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-            <NavLink exact to="/" className="nav-link text-danger">
-              Home
-            </NavLink>
-            <NavLink exact to="/Favorites" className="nav-link text-danger">
-              Favorites
-            </NavLink>
-            <NavLink exact to="/Newrelease" className="nav-link text-danger">
-              New Releases
-            </NavLink>
+          <Link to="/" exact="true" className='nav-link text-danger'>Home</Link>
+
+         <Link to="/" exact="true" className='nav-link text-danger'>favourte</Link>
+
+        <Link to="/" exact="true" className='nav-link text-danger'>Newrelease</Link>
+
           </Nav>
           <Form className="d-flex" onSubmit={handleSearch}>
             <Form.Control
