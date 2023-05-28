@@ -1,16 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Link } from 'react-router-dom';
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
-import Button from 'react-bootstrap/Button';
-import Card from 'react-bootstrap/Card';
-import { AiOutlineHeart } from "react-icons/ai";
+// MovieRoller.js
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Link } from "react-router-dom";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
+import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from "../../favouratesactions/favoritesActions";
 
 function MovieRoller({ searchTerm }) {
   const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
+  const favorites = useSelector((state) => state);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setCurrentPage(1);
@@ -46,18 +54,41 @@ function MovieRoller({ searchTerm }) {
     setCurrentPage(currentPage + 1);
   };
 
+  const isFavorite = (movie) => {
+    return favorites.some((favMovie) => favMovie.id === movie.id);
+  };
+
+  const handleAddToFavorites = (movie) => {
+    if (isFavorite(movie)) {
+      dispatch(removeFromFavorites(movie.id));
+    } else {
+      dispatch(addToFavorites(movie));
+    }
+  };
+
   return (
     <Container fluid>
       <Row>
         {movies.map((movie) => (
           <Col key={movie.id} className="mb-4">
-            <Card className="h-100" style={{ width: '18rem' }}>
-              <Card.Img variant="top" src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`} />
+            <Card className="h-100" style={{ width: "18rem" }}>
+              <Card.Img
+                variant="top"
+                src={`https://image.tmdb.org/t/p/w500/${movie.poster_path}`}
+              />
               <Card.Body className="d-flex flex-column">
-                <div className='d-flex justify-content-between'>
+                <div className="d-flex justify-content-between">
                   <Card.Title>MovieName: {movie.title}</Card.Title>
-                  <Link>
-                    <AiOutlineHeart size={24} color="red" />
+                  <Link onClick={() => handleAddToFavorites(movie)}>
+                    {isFavorite(movie) ? (
+                      <AiFillHeart size={24} color="red" className="filled" />
+                    ) : (
+                      <AiOutlineHeart
+                        size={24}
+                        color="red"
+                        className="bordered"
+                      />
+                    )}
                   </Link>
                 </div>
                 <Link to={`/MovieDetails/${movie.id}`}>
@@ -70,7 +101,11 @@ function MovieRoller({ searchTerm }) {
       </Row>
       <Row className="mt-4">
         <Col>
-          <Button variant="secondary" onClick={handlePrevPage} disabled={currentPage === 1}>
+          <Button
+            variant="secondary"
+            onClick={handlePrevPage}
+            disabled={currentPage === 1}
+          >
             Previous Page
           </Button>
         </Col>
