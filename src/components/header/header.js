@@ -6,13 +6,13 @@ import Container from 'react-bootstrap/Container';
 import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-import { addToFavorites, removeFromFavorites } from '../favouratesactions/favoritesActions';
+import { useSelector } from 'react-redux';
+// import { addToFavorites, removeFromFavorites } from '../favouratesactions/favoritesActions';
 
 function HeaderNav({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
-  const favorites = useSelector((state) => state);
-  const dispatch = useDispatch();
+  const favorites = useSelector((state) => state.favorites);
+  // const dispatch = useDispatch();
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -26,17 +26,17 @@ function HeaderNav({ onSearch }) {
     setSearchQuery(e.target.value);
   };
 
-  const isFavorite = (movie) => {
-    return favorites.some((favMovie) => favMovie.id === movie.id);
-  };
+  // const isFavorite = (movie) => {
+  //   return favorites.some((favMovie) => favMovie.id === movie.id);
+  // };
 
-  const handleAddToFavorites = (movie) => {
-    if (isFavorite(movie)) {
-      dispatch(removeFromFavorites(movie.id));
-    } else {
-      dispatch(addToFavorites(movie));
-    }
-  };
+  // const handleAddToFavorites = (movie) => {
+  //   if (isFavorite(movie)) {
+  //     dispatch(removeFromFavorites(movie.id));
+  //   } else {
+  //     dispatch(addToFavorites(movie));
+  //   }
+  // };
 
   return (
     <Navbar bg="dark" expand="lg">
@@ -47,7 +47,7 @@ function HeaderNav({ onSearch }) {
         <Navbar.Toggle aria-controls="navbarScroll" />
         <Navbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
-            <Link to="/" exact="true" className="nav-link text-danger">
+            <Link to="/" className="nav-link text-danger">
               Home
             </Link>
 
@@ -55,7 +55,7 @@ function HeaderNav({ onSearch }) {
               Favorites ({favorites.length})
             </Link>
 
-            <Link to="/" exact="true" className="nav-link text-danger">
+            <Link to="/" className="nav-link text-danger">
               Newrelease
             </Link>
           </Nav>

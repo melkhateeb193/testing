@@ -1,23 +1,16 @@
 // MovieRoller.js
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Card from "react-bootstrap/Card";
+import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { AiOutlineHeart, AiFillHeart } from "react-icons/ai";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  addToFavorites,
-  removeFromFavorites,
-} from "../../favouratesactions/favoritesActions";
+import { addToFavorites, removeFromFavorites } from "../../favouratesactions/favoritesActions";
+import { fetchMovies } from "../../favouratesactions/favoritesActions";
 
 function MovieRoller({ searchTerm }) {
-  const [movies, setMovies] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const favorites = useSelector((state) => state);
+  const movies = useSelector((state) => state.movies);
+  const favorites = useSelector((state) => state.favorites);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,24 +18,8 @@ function MovieRoller({ searchTerm }) {
   }, [searchTerm]);
 
   useEffect(() => {
-    loadMovies();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, searchTerm]);
-
-  const loadMovies = () => {
-    let url = searchTerm
-      ? `https://api.themoviedb.org/3/search/movie?api_key=7a1c19ea3c361a4d3cc53eb70ef8298c&query=${searchTerm}&page=${currentPage}`
-      : `https://api.themoviedb.org/3/movie/popular?api_key=7a1c19ea3c361a4d3cc53eb70ef8298c&page=${currentPage}`;
-
-    axios
-      .get(url)
-      .then((res) => {
-        setMovies(res.data.results);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+    dispatch(fetchMovies(searchTerm, currentPage));
+  }, [currentPage, searchTerm, dispatch]);
 
   const handlePrevPage = () => {
     if (currentPage > 1) {

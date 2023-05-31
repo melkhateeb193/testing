@@ -1,5 +1,5 @@
 // Favorites.js
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { removeFromFavorites } from './favoritesActions';
 import Button from "react-bootstrap/Button";
@@ -10,12 +10,29 @@ import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 
 function Favorites() {
-  const favorites = useSelector((state) => state);
+  const favorites = useSelector((state) => state.favorites);
   const dispatch = useDispatch();
+
+  // Load favorites from local storage on component mount
+  useEffect(() => {
+    const storedFavorites = localStorage.getItem('favorites');
+    if (storedFavorites) {
+      dispatch({ type: 'SET_FAVORITES', payload: JSON.parse(storedFavorites) });
+    }
+  }, [dispatch]);
+
+  // Update local storage when favorites change
+  useEffect(() => {
+    localStorage.setItem('favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const handleRemoveFromFavorites = (movieId) => {
     dispatch(removeFromFavorites(movieId));
   };
+
+  if (!favorites) {
+    return null; // or any fallback UI
+  }
 
   return (
     <Container fluid>
@@ -32,16 +49,16 @@ function Favorites() {
                   <Card.Title>MovieName: {movie.title}</Card.Title>
                 </div>
                 <div className='d-flex'>
-                <Link to={`/MovieDetails/${movie.id}`}>
-                  <Button variant="danger">Details</Button>
-                </Link>
-              <Button
-                variant="btn btn-outline-warning ms-4"
-                onClick={() => handleRemoveFromFavorites(movie.id)}
-              >
-                Remove 
-              </Button>
-              </div>
+                  <Link to={`/MovieDetails/${movie.id}`}>
+                    <Button variant="danger">Details</Button>
+                  </Link>
+                  <Button
+                    variant="btn btn-outline-warning ms-4"
+                    onClick={() => handleRemoveFromFavorites(movie.id)}
+                  >
+                    Remove 
+                  </Button>
+                </div>
               </Card.Body>
             </Card>
           </Col>
