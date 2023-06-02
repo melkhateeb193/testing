@@ -1,5 +1,4 @@
-// HeaderNav.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import Nav from 'react-bootstrap/Nav';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -7,12 +6,12 @@ import Form from 'react-bootstrap/Form';
 import Navbar from 'react-bootstrap/Navbar';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-// import { addToFavorites, removeFromFavorites } from '../favouratesactions/favoritesActions';
+import { LanguageContext } from '../favouratesactions/langcontext';
 
 function HeaderNav({ onSearch }) {
   const [searchQuery, setSearchQuery] = useState('');
   const favorites = useSelector((state) => state.favorites);
-  // const dispatch = useDispatch();
+  const { language, changeLanguage } = useContext(LanguageContext);
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -26,20 +25,12 @@ function HeaderNav({ onSearch }) {
     setSearchQuery(e.target.value);
   };
 
-  // const isFavorite = (movie) => {
-  //   return favorites.some((favMovie) => favMovie.id === movie.id);
-  // };
-
-  // const handleAddToFavorites = (movie) => {
-  //   if (isFavorite(movie)) {
-  //     dispatch(removeFromFavorites(movie.id));
-  //   } else {
-  //     dispatch(addToFavorites(movie));
-  //   }
-  // };
+  const handleLanguageChange = (newLanguage) => {
+    changeLanguage(newLanguage);
+  };
 
   return (
-    <Navbar bg="dark" expand="lg">
+    <Navbar bg="dark" expand="lg" dir={language === 'ar' ? 'rtl' : 'ltr'}>
       <Container fluid>
         <Link to="/" className="navbar-brand text-danger">
           Movie's Geeks
@@ -72,6 +63,22 @@ function HeaderNav({ onSearch }) {
               Search
             </Button>
           </Form>
+          <div className="d-flex">
+            <Button
+              variant="link"
+              className={`text-danger ${language === 'en' ? 'fw-bold' : ''}`}
+              onClick={() => handleLanguageChange('en')}
+            >
+              {language === 'ar' ? 'العربية' : 'English'}
+            </Button>
+            <Button
+              variant="link"
+              className={`text-danger ${language === 'ar' ? 'fw-bold' : ''}`}
+              onClick={() => handleLanguageChange('ar')}
+            >
+              {language === 'ar' ? 'English' : 'العربية'}
+            </Button>
+          </div>
         </Navbar.Collapse>
       </Container>
     </Navbar>

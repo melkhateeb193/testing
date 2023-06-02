@@ -1,21 +1,17 @@
 // LanguageContext.js
-import React, { createContext, useContext } from 'react';
-import { useDispatch } from 'react-redux';
-import { changeLanguage } from './languageActions';
+import React, { createContext, useState } from 'react';
 
-const LanguageContext = createContext();
-
-export const useLanguage = () => useContext(LanguageContext);
+export const LanguageContext = createContext();
 
 export const LanguageProvider = ({ children }) => {
-  const dispatch = useDispatch();
+  const [language, setLanguage] = useState('en');
 
-  const setLanguage = (language) => {
-    dispatch(changeLanguage(language));
+  const changeLanguage = (newLanguage) => {
+    setLanguage(newLanguage);
   };
 
   return (
-    <LanguageContext.Provider value={{ setLanguage }}>
+    <LanguageContext.Provider value={{ language, changeLanguage }}>
       {children}
     </LanguageContext.Provider>
   );

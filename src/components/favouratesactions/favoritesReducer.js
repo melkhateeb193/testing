@@ -1,15 +1,15 @@
 // favoritesReducer.js
-import { ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES, SET_MOVIES } from "./actionTypes";
+import {
+  ADD_TO_FAVORITES,
+  REMOVE_FROM_FAVORITES,
+  SET_MOVIES,
+} from "./actionTypes";
 
 const initialState = {
   favorites: [],
   movies: [],
   language: 'en'
 };
-
-
-
-
 
 const favoritesReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -28,14 +28,9 @@ const favoritesReducer = (state = initialState, action) => {
         ...state,
         movies: action.payload,
       };
-     
     default:
       return state;
   }
-
-
-
-  
 };
 
 export default favoritesReducer;

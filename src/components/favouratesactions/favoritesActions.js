@@ -1,5 +1,4 @@
-// favoritesActions.js
-import { ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES , SET_MOVIES } from "./actionTypes";
+import { ADD_TO_FAVORITES, REMOVE_FROM_FAVORITES, SET_MOVIES } from "./actionTypes";
 import axios from "axios";
 
 export const addToFavorites = (movie) => ({
@@ -16,7 +15,6 @@ export const setMovies = (movies) => ({
   type: SET_MOVIES,
   payload: movies,
 });
-
 
 export const fetchMovies = (searchTerm, currentPage) => {
   return (dispatch) => {
